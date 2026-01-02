@@ -1,16 +1,23 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.9.22'
     repositories {
-        gradlePluginPortal()
-        maven { url "https://maven.aliyun.com/repository/releases" }
+        // 阿里云镜像
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/central" }
         maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        // 华为云镜像
+        maven { url "https://repo.huaweicloud.com/repository/maven/" }
+        // 腾讯云镜像
+        maven { url "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/" }
         google()
         mavenCentral()
+        gradlePluginPortal()
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.2.2"
+        classpath 'com.android.tools.build:gradle:8.13.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -20,17 +27,24 @@ buildscript {
 
 allprojects {
     repositories {
-        gradlePluginPortal()
-        maven { url "https://maven.aliyun.com/repository/releases" }
+        // 阿里云镜像
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/central" }
         maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        // 华为云镜像
+        maven { url "https://repo.huaweicloud.com/repository/maven/" }
+        // 腾讯云镜像
+        maven { url "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/" }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
         //dlna-cast中cling仓
         maven {
             url 'http://4thline.org/m2'
             allowInsecureProtocol true
         }
         maven { url "https://jitpack.io" }
-        google()
-        mavenCentral()
     }
 }
 

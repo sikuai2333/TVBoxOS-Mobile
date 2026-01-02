@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
+    namespace 'com.github.tvbox.osc'
     compileSdkVersion 33
 
     defaultConfig {
@@ -91,7 +92,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.4.0'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
 
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
