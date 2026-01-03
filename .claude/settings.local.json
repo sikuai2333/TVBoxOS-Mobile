@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew:*)",
+      "Bash(gradlew.bat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n升级构建环境以支持 Java 21\n\n- Gradle: 7.3.3 → 8.13\n- Android Gradle Plugin: 7.2.2 → 8.13.2\n- Kotlin: 1.5.31 → 1.9.22\n- 统一 compileSdkVersion 为 33\n- 为所有模块添加 namespace \\(AGP 8.0+ 要求\\)\n- 配置国内镜像加速 \\(阿里云、华为云、腾讯云\\)\n- 更新 README 文档\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(./gradlew.bat :app:compileDebugJavaWithJavac:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n修复 DLNA 投屏功能兼容 Android 15\n\n- 创建自定义 ClingUpnpService 替代 AndroidUpnpServiceImpl\n- 添加 NoStreamServerConfiguration 避免 Jetty/Servlet 依赖\n- 移除 Jetty 依赖，添加 javax.servlet-api 和 cdi-api\n- 修复 CastDevicesAdapter 线程安全问题\n- 优化 CastListDialog 添加回调和验证\n- 更新 CastVideo 添加有效性检查\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\n添加视频下载功能\n\n功能特性:\n- 支持普通视频文件下载（断点续传）\n- 支持 M3U8/HLS 流媒体下载（多线程分片下载）\n- 支持 AES-128 加密视频解密\n- 自动检测并选择最佳码率\n- 下载进度实时显示（带速度平滑算法）\n- 应用重启后自动恢复未完成的下载任务\n- 下载完成后支持内置/外部播放器播放\n\n权限适配:\n- Android 13+: READ_MEDIA_VIDEO 权限\n- Android 11-12: MANAGE_EXTERNAL_STORAGE 权限\n- Android 10: 分区存储，应用私有目录\n- Android 9及以下: 传统存储权限\n\n优化:\n- UI 刷新节流，减少页面闪烁\n- M3U8 分片重试机制（每个分片最多5次）\n- 完成前验证所有分片文件存在\n- 避免竞态条件导致的下载不完整\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git remote set-url:*)"
+    ]
+  }
+}

@@ -2,7 +2,7 @@ package com.github.tvbox.osc.player.controller;
 
 import android.content.Context;
 import android.view.MotionEvent;
-import android.widget.ProgressBar;
+import android.view.View;
 import android.widget.Toast;
 
 import com.github.tvbox.osc.R;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class LiveNewController extends BaseController {
-    protected ProgressBar mLoading;
+    protected View mLoading;
     private int minFlingDistance = 100;             //最小识别距离
     private int minFlingVelocity = 10;              //最小识别速度
 
@@ -30,7 +30,7 @@ public class LiveNewController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
-        mLoading = findViewById(R.id.loading);
+        mLoading = findViewById(R.id.play_loading);
     }
 
     public interface LiveControlListener {
