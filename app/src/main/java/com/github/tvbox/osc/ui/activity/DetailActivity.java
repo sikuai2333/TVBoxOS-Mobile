@@ -70,6 +70,8 @@ import com.github.tvbox.osc.util.SearchHelper;
 import com.github.tvbox.osc.util.SubtitleHelper;
 import com.github.tvbox.osc.util.Utils;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.github.tvbox.osc.util.DownloadManager;
+import com.github.tvbox.osc.util.StoragePermissionHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -833,40 +835,40 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     }
 
     public void use1DMDownload() {
+        // 先检查存储权限
+        if (!StoragePermissionHelper.checkAndRequestPermissionForDownload(this)) {
+            return;
+        }
+
         if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             VodInfo.VodSeries vod = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex);
             String url = TextUtils.isEmpty(playFragment.getFinalUrl()) ? vod.url : playFragment.getFinalUrl();
-            // 创建Intent对象，启动1DM App
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            intent.setDataAndType(Uri.parse(url), "video/mp4");
-            intent.putExtra("title", vodInfo.name + " " + vod.name); // 传入文件保存名
-//            intent.setClassName("idm.internet.download.manager.plus", "idm.internet.download.manager.MainActivity");
-            intent.setClassName("idm.internet.download.manager.plus", "idm.internet.download.manager.Downloader");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            // 检查1DM App是否已安装
-            PackageManager pm = getPackageManager();
-            List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
-            boolean isIntentSafe = activities.size() > 0;
-
-            if (isIntentSafe) {
-                startActivity(intent); // 启动1DM App
-            } else {
-                // 如果1DM App未安装，提示用户安装1DM App
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("请先安装1DM+下载管理器");
-                builder.setMessage("为了下载视频，请先安装1DM+下载管理器。是否现在安装？");
-                builder.setPositiveButton("立即下载", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 跳转到下载链接
-                        Intent downloadIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://od.lk/d/MzRfMTg0NTcxMDdf/1DM _v15.6.apk"));
-                        startActivity(downloadIntent);
-                    }
-                });
-                builder.setNegativeButton("取消", null);
-                builder.show();
+            // 检查是否已存在
+            if (DownloadManager.getInstance().isTaskExists(url)) {
+                ToastUtils.showShort("任务已存在，请到下载管理查看");
+                return;
             }
+
+            // 检查是否是移动网络
+            if (DownloadManager.getInstance().isMobileNetwork() && !DownloadManager.getInstance().canDownloadOnMobile()) {
+                // 弹出提示对话框
+                new XPopup.Builder(this)
+                        .isDarkTheme(Utils.isDarkTheme())
+                        .asConfirm("移动网络提示", "当前使用移动网络，是否继续下载？\n（可在设置中开启移动网络下载）",
+                                "取消", "继续下载",
+                                () -> {
+                                    // 添加下载任务
+                                    DownloadManager.getInstance().addTask(url, vodInfo.name, vod.name);
+                                    ToastUtils.showShort("已添加到下载队列");
+                                }, null, false)
+                        .show();
+                return;
+            }
+
+            // 添加下载任务
+            DownloadManager.getInstance().addTask(url, vodInfo.name, vod.name);
+            ToastUtils.showShort("已添加到下载队列");
         } else {
             ToastUtils.showShort("资源异常,请稍后重试");
         }

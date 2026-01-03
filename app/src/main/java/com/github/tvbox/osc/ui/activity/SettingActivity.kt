@@ -428,6 +428,12 @@ class SettingActivity : BaseVbActivity<ActivitySettingBinding>() {
             mBinding.switchIjkCachePlay.setChecked(newConfig)
             Hawk.put(HawkConfig.IJK_CACHE_PLAY, newConfig)
         }
+
+        // 下载管理入口
+        mBinding.llDownloadManager.setOnClickListener { v: View? ->
+            FastClickCheckUtil.check(v)
+            jumpActivity(DownloadActivity::class.java)
+        }
     }
 
     override fun onBackPressed() {

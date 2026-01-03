@@ -18,4 +18,8 @@
     <external-path
         name="beta_external_files_path"
         path="Android/data/" />
+    <!-- 下载目录 -->
+    <external-files-path
+        name="download_files_path"
+        path="Download/TVBox/" />
 </paths>

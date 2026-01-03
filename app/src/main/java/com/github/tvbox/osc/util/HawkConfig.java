@@ -64,4 +64,8 @@ public class HawkConfig {
      * 搜索记录
      */
     public static final String HISTORY_SEARCH = "history_search";
+    /**
+     * 允许移动网络下载
+     */
+    public static final String DOWNLOAD_ON_MOBILE = "download_on_mobile";
 }

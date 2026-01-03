@@ -20,6 +20,7 @@ import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.OkGoHelper;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.Utils;
+import com.github.tvbox.osc.util.DownloadManager;
 import com.kingja.loadsir.core.LoadSir;
 import com.orhanobut.hawk.Hawk;
 import com.p2p.P2PClass;
@@ -73,6 +74,26 @@ public class App extends MultiDexApplication {
         FileUtils.cleanPlayerCache();
         initCrashConfig();
         Utils.initTheme();
+        // 恢复未完成的下载任务
+        resumeDownloads();
+    }
+
+    /**
+     * 恢复未完成的下载任务
+     */
+    private void resumeDownloads() {
+        new Thread(() -> {
+            try {
+                // 延迟一点确保数据库初始化完成
+                Thread.sleep(1000);
+                int count = DownloadManager.getInstance().resumeUnfinishedTasks();
+                if (count > 0) {
+                    LOG.i("已恢复 " + count + " 个下载任务");
+                }
+            } catch (Exception e) {
+                LOG.e("恢复下载任务失败: " + e.getMessage());
+            }
+        }).start();
     }
 
     private void initParams() {
