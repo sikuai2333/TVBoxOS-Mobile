@@ -54,7 +54,10 @@ android {
 
     buildTypes {
         debug {
-            signingConfig signingConfigs.config
+            // 如果签名文件存在则使用，否则使用默认 debug 签名
+            if (file('../TVBoxOSC.jks').exists()) {
+                signingConfig signingConfigs.config
+            }
         }
 
         release {
@@ -64,19 +67,17 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
     }
 
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
-    }
-    dexOptions {
-        javaMaxHeapSize "4g"
-        additionalParameters += '--multi-dex'
-        additionalParameters += '--set-max-idx-number=48000'
-        additionalParameters += '--minimal-main-dex'
     }
     buildFeatures {
         viewBinding true
@@ -162,8 +163,13 @@ dependencies {
     implementation 'com.hyman:flowlayout-lib:1.1.2'
     //崩溃
     implementation project(":crash")
-    //dlna投屏
-    implementation 'com.github.devin1014.DLNA-Cast:dlna-dmc:V1.0.0'
+    //dlna投屏 - 使用 Cling
+    implementation 'org.fourthline.cling:cling-core:2.1.2'
+    implementation 'org.fourthline.cling:cling-support:2.1.2'
+    // Servlet API for Cling (Android compatible)
+    implementation 'javax.servlet:javax.servlet-api:3.1.0'
+    // CDI API for Cling annotations
+    compileOnly 'javax.enterprise:cdi-api:1.2'
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
 }
